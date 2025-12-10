@@ -182,7 +182,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     let results = [];
     const courseSelect = document.getElementById('course');

@@ -289,7 +289,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 $(document).ready(function() {
     // Auto-calculate when both fields are filled
     $('#sltLoanAmount, #sltInstallments').on('input change', function() {

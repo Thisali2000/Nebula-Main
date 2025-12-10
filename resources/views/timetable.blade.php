@@ -337,26 +337,28 @@
             </div>
         </div>
 
-    <!-- FullCalendar v5 (modern build) -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+    <!-- FullCalendar v5 (self-hosted) -->
+    <link href="{{ asset('libs/fullcalendar/fullcalendar.common.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('libs/fullcalendar/daygrid.min.css') }}" rel="stylesheet" />
 
-    <!-- jQuery (kept for other UI code) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery (self-hosted) -->
+    <script src="{{ asset('libs/jquery/dist/jquery.min.js') }}"></script>
 
-    <!-- Moment.js (used in other parts of this page) -->
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <!-- Moment.js (self-hosted) -->
+    <script src="{{ asset('libs/moment/moment.min.js') }}"></script>
 
-    <!-- FullCalendar v5 bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <!-- FullCalendar (self-hosted) -->
+    <script src="{{ asset('libs/fullcalendar/fullcalendar.core.min.js') }}"></script>
+    <script src="{{ asset('libs/fullcalendar/fullcalendar.daygrid.min.js') }}"></script>
 
-    <!-- jsPDF for PDF export -->
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <!-- jsPDF (self-hosted) -->
+    <script src="{{ asset('libs/jspdf/jspdf.min.js') }}"></script>
 
-    <!-- html2canvas (needed to snapshot table) -->
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <!-- html2canvas (self-hosted) -->
+    <script src="{{ asset('libs/html2canvas/html2canvas.min.js') }}"></script>
 
 @push('scripts')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         $(document).ready(function () {
             var latestEventsRaw = []; // raw server rows
             var latestFcEvents = [];  // mapped fullcalendar events

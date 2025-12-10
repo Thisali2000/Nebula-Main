@@ -159,7 +159,7 @@
 </div>
 
 {{-- JS for dynamic rows --}}
-<script>
+<script nonce="{{ $cspNonce }}">
 function addInstallmentRow() {
     let tbody = document.getElementById('installmentsTableBody');
     let index = tbody.rows.length;

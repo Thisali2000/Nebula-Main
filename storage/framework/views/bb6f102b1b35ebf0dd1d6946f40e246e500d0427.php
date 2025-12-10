@@ -1,13 +1,11 @@
-@extends('inc.app')
+<?php $__env->startSection('title', 'NEBULA | DGMDashboard'); ?>
 
-@section('title', 'NEBULA | DGMDashboard')
-
-@section('content')
-    <link rel="stylesheet" href="{{ asset('css/styles.min.css') }}">
+<?php $__env->startSection('content'); ?>
+    <link rel="stylesheet" href="<?php echo e(asset('css/styles.min.css')); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="{{ asset('libs/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/tailwindcss.js') }}"></script>
-    <script src="{{ asset('libs/chartjs/chart.min.js') }}"></script>
+    <script src="<?php echo e(asset('libs/jquery/dist/jquery.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/tailwindcss.js')); ?>"></script>
+    <script src="<?php echo e(asset('libs/chartjs/chart.min.js')); ?>"></script>
     <div id="pageContent" class="bg-gray-50">
 
         <!-- Navigation Tabs -->
@@ -100,10 +98,12 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                        {{ date('Y') }}
+                                        <?php echo e(date('Y')); ?>
+
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                        {{ date('Y') - 1 }}
+                                        <?php echo e(date('Y') - 1); ?>
+
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Growth</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Outstanding
@@ -130,9 +130,9 @@
                                     <label class="block text-sm font-medium text-gray-700 mr-2">Year</label>
                                     <select id="yearSelect"
                                         class="border w-full border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
-                                        @for($y = date('Y'); $y >= 2010; $y--)
-                                            <option value="{{ $y }}" {{ $y == date('Y') ? 'selected' : '' }}>{{ $y }}</option>
-                                        @endfor
+                                        <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                            <option value="<?php echo e($y); ?>" <?php echo e($y == date('Y') ? 'selected' : ''); ?>><?php echo e($y); ?></option>
+                                        <?php endfor; ?>
                                     </select>
                                 </div>
                                 <div class="flex flex-row gap-2 mb-6">
@@ -140,11 +140,12 @@
                                         <select id="studentMonthSelect"
                                             class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-xs">
                                             <option value="">All Months</option>
-                                            @for($m = 1; $m <= 12; $m++)
-                                                <option value="{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}">
-                                                    {{ date('F', mktime(0, 0, 0, $m, 1)) }}
+                                            <?php for($m = 1; $m <= 12; $m++): ?>
+                                                <option value="<?php echo e(str_pad($m, 2, '0', STR_PAD_LEFT)); ?>">
+                                                    <?php echo e(date('F', mktime(0, 0, 0, $m, 1))); ?>
+
                                                 </option>
-                                            @endfor
+                                            <?php endfor; ?>
                                         </select>
                                     </div>
                                     <div class="filter-card p-2">
@@ -178,9 +179,9 @@
                                             <select id="fromYearSelect"
                                                 class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-sm"
                                                 disabled>
-                                                @for($y = date('Y'); $y >= 2010; $y--)
-                                                    <option value="{{ $y }}">{{ $y }}</option>
-                                                @endfor
+                                                <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                                    <option value="<?php echo e($y); ?>"><?php echo e($y); ?></option>
+                                                <?php endfor; ?>
                                             </select>
                                         </div>
                                         <div>
@@ -188,9 +189,9 @@
                                             <select id="toYearSelect"
                                                 class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-sm"
                                                 disabled>
-                                                @for($y = date('Y'); $y >= 2010; $y--)
-                                                    <option value="{{ $y }}">{{ $y }}</option>
-                                                @endfor
+                                                <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                                    <option value="<?php echo e($y); ?>"><?php echo e($y); ?></option>
+                                                <?php endfor; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -202,9 +203,9 @@
                                             <select id="rangeStartYearSelect"
                                                 class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-sm"
                                                 disabled>
-                                                @for($y = date('Y'); $y >= 2010; $y--)
-                                                    <option value="{{ $y }}">{{ $y }}</option>
-                                                @endfor
+                                                <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                                    <option value="<?php echo e($y); ?>"><?php echo e($y); ?></option>
+                                                <?php endfor; ?>
                                             </select>
                                         </div>
                                         <div>
@@ -212,9 +213,9 @@
                                             <select id="rangeEndYearSelect"
                                                 class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-sm"
                                                 disabled>
-                                                @for($y = date('Y'); $y >= 2010; $y--)
-                                                    <option value="{{ $y }}">{{ $y }}</option>
-                                                @endfor
+                                                <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                                    <option value="<?php echo e($y); ?>"><?php echo e($y); ?></option>
+                                                <?php endfor; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -237,9 +238,9 @@
                                 <select id="courseSelect" multiple
                                     class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
                                     <option value="all">All Courses</option>
-                                    @foreach(\App\Models\Course::all() as $course)
-                                        <option value="{{ $course->course_id }}">{{ $course->course_name }}</option>
-                                    @endforeach
+                                    <?php $__currentLoopData = \App\Models\Course::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $course): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($course->course_id); ?>"><?php echo e($course->course_name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
 
@@ -291,8 +292,8 @@
                 <div id="studentUploadModal" style="display:none;"
                     class="fixed inset-0 flex items-center justify-center z-50 modal-overlay" aria-hidden="true">
                     <form id="studentUploadForm" enctype="multipart/form-data" class="bg-white p-6 rounded shadow w-96"
-                        method="POST" action="{{ route('bulk.student.upload') }}">
-                        @csrf
+                        method="POST" action="<?php echo e(route('bulk.student.upload')); ?>">
+                        <?php echo csrf_field(); ?>
                         <h3 class="mb-4 font-bold text-lg">Upload Student Excel</h3>
                         <input type="file" name="student_excel" accept=".xlsx,.xls,.csv" required class="mb-4">
                         <div class="flex gap-2 justify-end">
@@ -316,9 +317,9 @@
                                     <label class="block text-sm font-medium text-gray-700 mr-2">Year</label>
                                     <select id="revenueYearSelect"
                                         class="border w-full border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
-                                        @for($y = date('Y'); $y >= 2010; $y--)
-                                            <option value="{{ $y }}" {{ $y == date('Y') ? 'selected' : '' }}>{{ $y }}</option>
-                                        @endfor
+                                        <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                            <option value="<?php echo e($y); ?>" <?php echo e($y == date('Y') ? 'selected' : ''); ?>><?php echo e($y); ?></option>
+                                        <?php endfor; ?>
                                     </select>
                                 </div>
                                 <div class="flex flex-row gap-2 mb-6">
@@ -326,11 +327,12 @@
                                         <select id="revenueMonthSelect"
                                             class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-xs">
                                             <option value="">All Months</option>
-                                            @for($m = 1; $m <= 12; $m++)
-                                                <option value="{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}">
-                                                    {{ date('F', mktime(0, 0, 0, $m, 1)) }}
+                                            <?php for($m = 1; $m <= 12; $m++): ?>
+                                                <option value="<?php echo e(str_pad($m, 2, '0', STR_PAD_LEFT)); ?>">
+                                                    <?php echo e(date('F', mktime(0, 0, 0, $m, 1))); ?>
+
                                                 </option>
-                                            @endfor
+                                            <?php endfor; ?>
                                         </select>
                                     </div>
                                     <div class="filter-card p-2">
@@ -361,9 +363,9 @@
                                             <select id="revenueFromYearSelect"
                                                 class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-sm"
                                                 disabled>
-                                                @for($y = date('Y'); $y >= 2010; $y--)
-                                                    <option value="{{ $y }}">{{ $y }}</option>
-                                                @endfor
+                                                <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                                    <option value="<?php echo e($y); ?>"><?php echo e($y); ?></option>
+                                                <?php endfor; ?>
                                             </select>
                                         </div>
                                         <div>
@@ -371,9 +373,9 @@
                                             <select id="revenueToYearSelect"
                                                 class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-sm"
                                                 disabled>
-                                                @for($y = date('Y'); $y >= 2010; $y--)
-                                                    <option value="{{ $y }}">{{ $y }}</option>
-                                                @endfor
+                                                <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                                    <option value="<?php echo e($y); ?>"><?php echo e($y); ?></option>
+                                                <?php endfor; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -384,9 +386,9 @@
                                             <select id="revenueRangeStartYearSelect"
                                                 class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-sm"
                                                 disabled>
-                                                @for($y = date('Y'); $y >= 2010; $y--)
-                                                    <option value="{{ $y }}">{{ $y }}</option>
-                                                @endfor
+                                                <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                                    <option value="<?php echo e($y); ?>"><?php echo e($y); ?></option>
+                                                <?php endfor; ?>
                                             </select>
                                         </div>
                                         <div>
@@ -394,9 +396,9 @@
                                             <select id="revenueRangeEndYearSelect"
                                                 class="w-full border border-gray-300 rounded-md px-2 py-1 bg-white text-sm"
                                                 disabled>
-                                                @for($y = date('Y'); $y >= 2010; $y--)
-                                                    <option value="{{ $y }}">{{ $y }}</option>
-                                                @endfor
+                                                <?php for($y = date('Y'); $y >= 2010; $y--): ?>
+                                                    <option value="<?php echo e($y); ?>"><?php echo e($y); ?></option>
+                                                <?php endfor; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -417,9 +419,9 @@
                                 <select id="revenueCourseSelect" multiple
                                     class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
                                     <option value="all">All Courses</option>
-                                    @foreach(\App\Models\Course::all() as $course)
-                                        <option value="{{ $course->course_id }}">{{ $course->course_name }}</option>
-                                    @endforeach
+                                    <?php $__currentLoopData = \App\Models\Course::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $course): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($course->course_id); ?>"><?php echo e($course->course_name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
                         </div>
@@ -456,8 +458,8 @@
                 <div id="revenueUploadModal" style="display:none;"
                     class="fixed inset-0 flex items-center justify-center z-50 modal-overlay" aria-hidden="true">
                     <form id="revenueUploadForm" enctype="multipart/form-data" class="bg-white p-6 rounded shadow w-96"
-                        method="POST" action="{{ route('bulk.revenue.upload') }}">
-                        @csrf
+                        method="POST" action="<?php echo e(route('bulk.revenue.upload')); ?>">
+                        <?php echo csrf_field(); ?>
                         <h3 class="mb-4 font-bold text-lg">Upload Revenue Excel</h3>
                         <input type="file" name="revenue_excel" accept=".xlsx,.xls,.csv" required class="mb-4">
                         <div class="flex gap-2 justify-end">
@@ -571,15 +573,15 @@
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script nonce="{{ $cspNonce }}">
+    <script nonce="<?php echo e($cspNonce); ?>">
         let currentCharts = {};
         const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
         function downloadStudentTemplate() {
-            window.location.href = "{{ route('bulk.student.template') }}";
+            window.location.href = "<?php echo e(route('bulk.student.template')); ?>";
         }
         function downloadRevenueTemplate() {
-            window.location.href = "{{ route('bulk.revenue.template') }}";
+            window.location.href = "<?php echo e(route('bulk.revenue.template')); ?>";
         }
         // Tab switching
         function showTab(tabName) {
@@ -1547,10 +1549,10 @@
 
         // Download exports (actual uploaded table data)
         function downloadStudentExport() {
-            window.location.href = "{{ route('bulk.student.export') }}";
+            window.location.href = "<?php echo e(route('bulk.student.export')); ?>";
         }
         function downloadRevenueExport() {
-            window.location.href = "{{ route('bulk.revenue.export') }}";
+            window.location.href = "<?php echo e(route('bulk.revenue.export')); ?>";
         }
 
         // Initialize on page load
@@ -1558,4 +1560,5 @@
             showTab('overview');
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('inc.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\thisali\Desktop\thisali\Nebula-Main\resources\views/dgmdashboard.blade.php ENDPATH**/ ?>

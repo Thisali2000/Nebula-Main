@@ -4214,7 +4214,7 @@ function savePaymentRecordFromUpdate() {
     .finally(() => showSpinner(false));
 }
 </script>
-<script>
+<script nonce="{{ $cspNonce }}">
 // ---------- helpers ----------
 const money = (n) =>
   (Number(n || 0)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });

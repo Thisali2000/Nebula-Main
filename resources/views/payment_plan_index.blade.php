@@ -385,7 +385,7 @@
         {{ $plans->withQueryString()->links() }}
     </div>
 
-    <script>
+    <script nonce="{{ $cspNonce }}">
         window.addEventListener('load', () => {
             // Select all pagination icons and normalize their size
             document.querySelectorAll('#pagination-wrapper svg').forEach(svg => {
@@ -412,7 +412,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 // CLIENT-SIDE EXPORT FUNCTIONS (Frontend Only)
 function exportData(format) {
     // Get current filter parameters

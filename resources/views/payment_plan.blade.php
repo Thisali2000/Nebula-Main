@@ -258,7 +258,7 @@
         </div>
     </div>
 </div>
-<script>
+<script nonce="{{ $cspNonce }}">
 function toggleAmountField() {
     var amountField = document.getElementById('amountField');
     var franchisePaymentYes = document.getElementById('franchisePaymentYes');

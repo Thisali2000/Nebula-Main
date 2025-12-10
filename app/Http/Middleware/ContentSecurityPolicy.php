@@ -19,12 +19,16 @@ class ContentSecurityPolicy
         $response = $next($request);
 
         // 4. Set CSP header including nonce
-        $csp = "default-src 'self'; "
-             . "script-src 'self' 'nonce-$nonce'; "
-             . "style-src 'self' 'nonce-$nonce'; "
-             . "img-src 'self' data:; "
-             . "connect-src 'self'; "
-             . "font-src 'self' https://fonts.gstatic.com; ";
+           // Allow specific third-party hosts used in views (CDN for icons and Google Fonts).
+           // We keep nonce for inline scripts/styles while permitting those external origins.
+           // After self-hosting bootstrap-icons, only allow 'self' and the nonce for scripts/styles.
+           // Keep Google Fonts origins if your app still references them.
+           $csp = "default-src 'self'; "
+               . "script-src 'self' 'nonce-$nonce'; "
+               . "style-src 'self' 'nonce-$nonce' https://fonts.googleapis.com; "
+               . "img-src 'self' data:; "
+               . "connect-src 'self'; "
+               . "font-src 'self' https://fonts.gstatic.com; ";
 
         // 5. Add CSP header to response
         $response->headers->set('Content-Security-Policy', $csp);

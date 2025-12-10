@@ -36,7 +36,7 @@
                         </select>
                     </div>
                 </div>
-
+        
                 <div id="fields-container" style="display: none;">
                     <div class="mb-3 row mx-3">
                         <label for="course" class="col-sm-2 col-form-label">Course <span class="text-danger">*</span></label>
@@ -134,7 +134,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     let students = [];
     const courseSelect = document.getElementById('course');

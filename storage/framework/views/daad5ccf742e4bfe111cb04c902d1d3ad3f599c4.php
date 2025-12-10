@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 <!-- ϥϙϜϞϧϰαα -->
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'NEBULA')</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- CSRF Token -->
-    <meta name="csp-nonce" content="{{ $cspNonce }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logos/favicon.jpg') }}" />
+    <title><?php echo $__env->yieldContent('title', 'NEBULA'); ?></title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>"> <!-- CSRF Token -->
+    <meta name="csp-nonce" content="<?php echo e($cspNonce); ?>">
+    <link rel="shortcut icon" type="image/png" href="<?php echo e(asset('images/logos/favicon.jpg')); ?>" />
 
     <!-- Tabler Icons CSS -->
-    <link rel="stylesheet" href="{{ asset('css/icons/tabler-icons/tabler-icons.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/icons/tabler-icons/tabler-icons.css')); ?>">
     <!-- Bootstrap Icons (self-hosted) -->
-    <link href="{{ asset('libs/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('libs/bootstrap-icons/bootstrap-icons.css')); ?>" rel="stylesheet">
 
     <!-- CSS -->
-    <link href="{{ asset('css/styles.min.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('css/styles.min.css')); ?>" rel="stylesheet">
     
 
     <!-- JS -->
-    <script src="{{ asset('libs/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('libs/simplebar/dist/simplebar.js') }}"></script>
+    <script src="<?php echo e(asset('libs/jquery/dist/jquery.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('libs/bootstrap/dist/js/bootstrap.bundle.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('libs/simplebar/dist/simplebar.js')); ?>"></script>
     <!-- Sidebar + layout interactions (hamburger toggle, responsive sidebar) -->
-    <script src="{{ asset('js/app.min.js') }}"></script>
-    <script src="{{ asset('js/sidebarmenu.js') }}"></script>
+    <script src="<?php echo e(asset('js/app.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/sidebarmenu.js')); ?>"></script>
     <style>
         body {
             background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E') no-repeat center center fixed;
@@ -35,7 +35,7 @@
         }
 
         body.loaded {
-            background-image: url('{{ asset('images/backgrounds/nebula.jpg') }}');
+            background-image: url('<?php echo e(asset('images/backgrounds/nebula.jpg')); ?>');
         }
 
         .navbar {
@@ -52,7 +52,7 @@
         }
     </style>
 
-    <script nonce="{{ $cspNonce }}">
+    <script nonce="<?php echo e($cspNonce); ?>">
         document.addEventListener('DOMContentLoaded', function() {
             const body = document.querySelector('body');
             body.classList.add('loaded');
@@ -69,7 +69,7 @@
         <!-- Sidebar Start -->
         <aside class="left-sidebar">
             <!-- Sidebar scroll-->
-            @include('components.sidebar')
+            <?php echo $__env->make('components.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <!-- End Sidebar scroll-->
         </aside>
         <div x-data x-init="
@@ -80,7 +80,7 @@
             activeLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     })">
-<script nonce="{{ $cspNonce }}">
+<script nonce="<?php echo e($cspNonce); ?>">
     document.addEventListener('DOMContentLoaded', () => {
         const sidebar = document.querySelector('.scroll-sidebar');
         const activeLink = sidebar?.querySelector('.sidebar-link.active');
@@ -127,18 +127,18 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img id="headerAvatar" src="{{ (auth()->check() && !empty(auth()->user()->user_profile)) ? asset('storage/' . auth()->user()->user_profile) : asset('images/profile/user-1.jpg') }}" alt="User avatar"
+                                    <img id="headerAvatar" src="<?php echo e((auth()->check() && !empty(auth()->user()->user_profile)) ? asset('storage/' . auth()->user()->user_profile) : asset('images/profile/user-1.jpg')); ?>" alt="User avatar"
                                         width="35" height="35" class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up outline-shadow"
                                     aria-labelledby="drop2">
                                     <div class="message-body">
-                                        <a href="{{ route('user.profile') }}"
+                                        <a href="<?php echo e(route('user.profile')); ?>"
                                             class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-user fs-6"></i>
                                             <p class="mb-0 fs-3">My Profile</p>
                                         </a>
-                                        <a href="{{ route('logout') }}"
+                                        <a href="<?php echo e(route('logout')); ?>"
                                             class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
             </header>
             <!--  Header End -->
             <div class="container-fluid flex-grow-1">
-                @yield('content')
+                <?php echo $__env->yieldContent('content'); ?>
             </div>
             <div class="footer-wrapper mt-auto">
                 <footer class="footer bg-dark text-light text-center py-3">
@@ -173,7 +173,7 @@
         </div>
     </div>
 
-    <script nonce="{{ $cspNonce }}">
+    <script nonce="<?php echo e($cspNonce); ?>">
         document.addEventListener("DOMContentLoaded", function() {
             // Get the current time
             var currentTime = new Date();
@@ -190,7 +190,7 @@
             }
 
             // Get the user's name
-            var userName = "{{ auth()->check() ? auth()->user()->name : '' }}";
+            var userName = "<?php echo e(auth()->check() ? auth()->user()->name : ''); ?>";
 
             // Display the greeting and user's name
             if (userName) {
@@ -199,7 +199,7 @@
         });
     </script>
 
-    <script nonce="{{ $cspNonce }}">
+    <script nonce="<?php echo e($cspNonce); ?>">
         // Global AJAX setup for CSRF token
         $.ajaxSetup({
             headers: {
@@ -208,10 +208,10 @@
         });
     </script>
 
-    @yield('scripts')
-    @stack('scripts')
+    <?php echo $__env->yieldContent('scripts'); ?>
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 
-    <script nonce="{{ $cspNonce }}">
+    <script nonce="<?php echo e($cspNonce); ?>">
         document.addEventListener("DOMContentLoaded", function() {
             const courseManagementLink = document.getElementById('course-management-link');
             if (courseManagementLink && window.location.pathname.startsWith('/course-management')) {
@@ -223,3 +223,4 @@
 </body>
 </html>
 
+<?php /**PATH C:\Users\thisali\Desktop\thisali\Nebula-Main\resources\views/inc/app.blade.php ENDPATH**/ ?>

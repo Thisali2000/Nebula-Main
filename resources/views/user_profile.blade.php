@@ -322,7 +322,7 @@ function togglePassword(fieldId) {
     </div>
 </div>
 
-<!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<!-- Bootstrap Icons (self-hosted) -->
+<link rel="stylesheet" href="{{ asset('libs/bootstrap-icons/bootstrap-icons.css') }}">
 
 @endsection

@@ -150,7 +150,7 @@
 </div>
 
 <!-- JS to dynamically show roles for each selected phase -->
-<script>
+<script nonce="{{ $cspNonce }}">
 document.querySelectorAll('.phase-checkbox').forEach(cb => {
   cb.addEventListener('change', function() {
     const container = document.getElementById('roleContainer');

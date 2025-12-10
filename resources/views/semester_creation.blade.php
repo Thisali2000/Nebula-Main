@@ -138,7 +138,7 @@
 @endsection
 
 @section('scripts')
-<script>
+<script nonce="{{ $cspNonce }}">
 let courseSpecializations = [];
 document.addEventListener('DOMContentLoaded', function() {
     const locationSelect = document.getElementById('location');

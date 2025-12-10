@@ -822,7 +822,7 @@
   </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 // ---------- Notifications ----------
 function showSuccessMessage(message){
   document.querySelectorAll('.success-message,.error-message').forEach(m=>m.remove());

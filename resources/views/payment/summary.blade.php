@@ -376,7 +376,7 @@
 {{-- Chart.js --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 // ========== FILTER FUNCTIONS (FIXED) ==========
 function applyFilters() {
     const range = document.getElementById('rangeFilter').value;

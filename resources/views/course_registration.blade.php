@@ -408,7 +408,7 @@
 @endsection
 
 @push('scripts')
-<script>
+<script nonce="{{ $cspNonce }}">
 $(document).ready(function() {
     // Enter key support for NIC search
     $('#studentNicSearch').on('keypress', function(e) {

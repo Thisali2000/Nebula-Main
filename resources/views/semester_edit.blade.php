@@ -175,7 +175,7 @@
 @endsection
 
 @section('scripts')
-<script>
+<script nonce="{{ $cspNonce }}">
 let courseSpecializations = [];
 let addedModules = [];
 let allModules = [];
