@@ -3,7 +3,7 @@
 @section('title', 'NEBULA | Student Profile')
 
 @section('content')
-<style>
+<style nonce="{{ $cspNonce }}">
 /* Validation Error Styles */
 .is-invalid {
     border-color: #dc3545 !important;

@@ -4,7 +4,7 @@
 
 @section('content')
 
-<style>
+<style nonce="{{ $cspNonce }}">
 /* Toast Notification Styles */
 .toast-container {
     position: fixed;

@@ -1,11 +1,39 @@
-<?php $__env->startSection('title', 'NEBULA | DGMDashboard'); ?>
+<?php $__env->startSection('title', 'NEBULA | Dashboard'); ?>
 
 <?php $__env->startSection('content'); ?>
     <link rel="stylesheet" href="<?php echo e(asset('css/styles.min.css')); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="<?php echo e(asset('libs/jquery/dist/jquery.min.js')); ?>"></script>
+    <script nonce="<?php echo e($cspNonce); ?>">
+        // Intercept style element creation to add nonce for Tailwind CSS
+        (function() {
+            const nonce = '<?php echo e($cspNonce); ?>';
+            if (nonce) {
+                const originalCreateElement = document.createElement;
+                document.createElement = function(tagName) {
+                    const element = originalCreateElement.call(document, tagName);
+                    if (tagName.toLowerCase() === 'style') {
+                        element.setAttribute('nonce', nonce);
+                    }
+                    return element;
+                };
+                
+                // Also observe for any style elements added after Tailwind loads
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.nodeType === 1 && node.tagName === 'STYLE' && !node.getAttribute('nonce')) {
+                                node.setAttribute('nonce', nonce);
+                            }
+                        });
+                    });
+                });
+                observer.observe(document.head, { childList: true, subtree: true });
+            }
+        })();
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="<?php echo e(asset('js/tailwindcss.js')); ?>"></script>
-    <script src="<?php echo e(asset('libs/chartjs/chart.min.js')); ?>"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <div id="pageContent" class="bg-gray-50">
 
         <!-- Navigation Tabs -->
@@ -23,6 +51,10 @@
                     <button onclick="showTab('revenues')" id="tab-revenues"
                         class="px-4 py-2 rounded-lg text-sm font-medium tab-inactive">
                         <i class="fas fa-dollar-sign mr-2"></i>Revenues
+                    </button>
+                    <button onclick="showTab('outstanding')" id="tab-outstanding"
+                        class="px-4 py-2 rounded-lg text-sm font-medium tab-inactive">
+                        <i class="fas fa-exclamation-circle mr-2"></i>Outstanding
                     </button>
                     <button onclick="showTab('marketing')" id="tab-marketing"
                         class="px-4 py-2 rounded-lg text-sm font-medium tab-inactive">
@@ -113,6 +145,15 @@
                             <tbody id="revenueSummaryBody" class="divide-y divide-gray-200">
                                 <!-- JS will populate rows here -->
                             </tbody>
+                            <tfoot class="bg-gray-50 border-t-2 border-gray-300">
+                                <tr class="font-bold">
+                                    <td class="px-6 py-3 text-sm font-medium text-gray-900">Total</td>
+                                    <td class="px-6 py-3 text-sm text-gray-900" id="totalCurrentYear">Rs. 0.00</td>
+                                    <td class="px-6 py-3 text-sm text-gray-900" id="totalPreviousYear">Rs. 0.00</td>
+                                    <td class="px-6 py-3 text-sm text-gray-900" id="totalGrowth">0%</td>
+                                    <td class="px-6 py-3 text-sm text-gray-900" id="totalOutstanding">Rs. 0.00</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -226,7 +267,7 @@
                             <div class="filter-card md:col-span-2 flex flex-col justify-between">
 
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                                <select id="locationSelect"
+                                <select id="locationSelect" multiple
                                     class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
                                     <option value="all">All Locations</option>
                                     <option value="Welisara">Welisara</option>
@@ -407,7 +448,7 @@
 
                             <div class="filter-card md:col-span-2 flex flex-col justify-between">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                                <select id="revenueLocationSelect"
+                                <select id="revenueLocationSelect" multiple
                                     class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
                                     <option value="all">All Locations</option>
                                     <option value="Welisara">Welisara</option>
@@ -471,6 +512,71 @@
                 </div>
             </div>
 
+            <!-- Outstanding Tab -->
+            <div id="content-outstanding" class="tab-content">
+                <div class="bg-white shadow-sm border-b mb-6">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+                            <div class="filter-card">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                                <select id="outstandingLocationSelect" multiple
+                                    class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
+                                    <option value="all">All Locations</option>
+                                    <option value="Welisara">Welisara</option>
+                                    <option value="Moratuwa">Moratuwa</option>
+                                    <option value="Peradeniya">Peradeniya</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-card md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Course</label>
+                                <select id="outstandingCourseSelect" multiple
+                                    class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
+                                    <option value="all">All Courses</option>
+                                    <?php $__currentLoopData = \App\Models\Course::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $course): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($course->course_id); ?>"><?php echo e($course->course_name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex justify-end">
+                            <button onclick="loadOutstandingTabData()"
+                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">
+                                Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="text-lg font-semibold mb-4">Outstanding by Location</h3>
+                        <div style="height: 400px;">
+                            <canvas id="outstandingTabChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="text-lg font-semibold mb-4">Outstanding Summary</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Outstanding (Rs.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="outstandingSummaryBody" class="divide-y divide-gray-200">
+                                    <!-- populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Marketing Tab -->
             <div id="content-marketing" class="tab-content">
@@ -572,7 +678,6 @@
         }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script nonce="<?php echo e($cspNonce); ?>">
         let currentCharts = {};
         const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
@@ -638,6 +743,9 @@
                     loadRevenueData();
                     loadOutstandingData();
                     break;
+                case 'outstanding':
+                    loadOutstandingTabData();
+                    break;
                 case 'marketing':
                     loadMarketingData();
                     break;
@@ -667,18 +775,43 @@
                 // Populate Revenue Summary Table
                 const tbody = document.getElementById('revenueSummaryBody');
                 tbody.innerHTML = '';
+
                 if (data.locationSummary) {
+                    let totalCurrentYear = 0;
+                    let totalPreviousYear = 0;
+                    let totalOutstanding = 0;
+
                     data.locationSummary.forEach(row => {
+
+                        const current = parseFloat(row.current_year.toString().replace(/,/g, ""));
+                        const previous = parseFloat(row.previous_year.toString().replace(/,/g, ""));
+                        const outstanding = parseFloat(row.outstanding.toString().replace(/,/g, ""));
+
                         tbody.innerHTML += `
-                                                                                                                                                                                                                                                                            <tr>
-                                                                                                                                                                                                                                                                                <td class="px-6 py-4 text-sm font-medium text-gray-900">${row.location}</td>
-                                                                                                                                                                                                                                                                                <td class="px-6 py-4 text-sm text-gray-900">Rs. ${row.current_year}</td>
-                                                                                                                                                                                                                                                                                <td class="px-6 py-4 text-sm text-gray-900">Rs. ${row.previous_year}</td>
-                                                                                                                                                                                                                                                                                <td class="px-6 py-4 text-sm ${row.growth >= 0 ? 'text-green-600' : 'text-red-600'}">${row.growth >= 0 ? '+' : ''}${row.growth}%</td>
-                                                                                                                                                                                                                                                                                <td class="px-6 py-4 text-sm text-gray-900">Rs. ${row.outstanding}</td>
-                                                                                                                                                                                                                                                                            </tr>
-                                                                                                                                                                                                                                                                        `;
+                                            <tr>
+                                                <td class="px-6 py-4 text-sm font-medium text-gray-900">${row.location}</td>
+                                                <td class="px-6 py-4 text-sm text-gray-900">Rs. ${current.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                                                <td class="px-6 py-4 text-sm text-gray-900">Rs. ${previous.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                                                <td class="px-6 py-4 text-sm ${row.growth >= 0 ? 'text-green-600' : 'text-red-600'}">${row.growth >= 0 ? '+' : ''}${row.growth}%</td>
+                                                <td class="px-6 py-4 text-sm text-gray-900">Rs. ${outstanding.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                                            </tr>
+                                        `;
+
+                        totalCurrentYear += current;
+                        totalPreviousYear += previous;
+                        totalOutstanding += outstanding;
                     });
+
+                    const totalGrowth = totalPreviousYear > 0
+                        ? (((totalCurrentYear - totalPreviousYear) / totalPreviousYear) * 100).toFixed(1)
+                        : 0;
+
+                    // display totals WITH commas
+                    document.getElementById('totalCurrentYear').textContent = 'Rs. ' + totalCurrentYear.toLocaleString('en-US', { minimumFractionDigits: 2 });
+                    document.getElementById('totalPreviousYear').textContent = 'Rs. ' + totalPreviousYear.toLocaleString('en-US', { minimumFractionDigits: 2 });
+                    document.getElementById('totalGrowth').textContent = (totalGrowth >= 0 ? '+' : '') + totalGrowth + '%';
+                    document.getElementById('totalGrowth').className = 'px-6 py-3 text-sm ' + (totalGrowth >= 0 ? 'text-green-600' : 'text-red-600');
+                    document.getElementById('totalOutstanding').textContent = 'Rs. ' + totalOutstanding.toLocaleString('en-US', { minimumFractionDigits: 2 });
                 }
 
                 // Fetch students by location and show in chart + numbers
@@ -733,7 +866,6 @@
                     });
                 }
 
-                loadMonthlyTrend();
                 loadLocationBreakdown();
             } catch (error) {
                 console.error('Error loading overview data:', error);
@@ -757,7 +889,7 @@
                     // Always show all locations, even if count is zero
                     const allLocations = ['Welisara', 'Moratuwa', 'Peradeniya'];
                     const chartData = allLocations.map(loc => {
-                        const found = studentsData.find(d => d.institute_location === loc);
+                        const found = data.find(d => d.institute_location === loc);
                         return found ? found.count : 0;
                     });
                     currentCharts.studentsLocation = new Chart(ctx, {
@@ -1198,15 +1330,141 @@
             }
         }
 
+        async function loadOutstandingTabData() {
+            const params = getOutstandingFilterParams();
+            try {
+                const res = await fetch(`/api/dashboard/outstanding-by-year-course?${new URLSearchParams(params)}`);
+                const data = await res.json(); // [{year, location, course_name, outstanding}, ...]
+
+                // Build unique lists of courses and locations from payload
+                const coursesSet = new Set();
+                const locationsSet = new Set();
+                data.forEach(item => {
+                    const course = item.course_name || item.course || 'Unknown';
+                    const loc = item.location || item.institute_location || 'Unknown';
+                    coursesSet.add(course);
+                    locationsSet.add(loc);
+                });
+                const courses = Array.from(coursesSet).sort();
+                const locations = Array.from(locationsSet).length ? Array.from(locationsSet) : ['Welisara', 'Moratuwa', 'Peradeniya'];
+
+                // Aggregate outstanding per location (for summary table) and prepare datasets per course by location
+                const locationTotals = {};
+                locations.forEach(loc => locationTotals[loc] = 0);
+
+                // Color palette for courses (extendable)
+                const colors = [
+                    '#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#6366F1', '#EC4899', '#22C1C3', '#A78BFA', '#F97316', '#06B6D4'
+                ];
+
+                // Build datasets: one dataset (bar) per course; x-axis = locations
+                const datasets = courses.map((course, idx) => {
+                    const vals = locations.map(loc => {
+                        const matched = data.filter(d =>
+                            (d.location === loc || d.institute_location === loc) &&
+                            ((d.course_name === course) || (d.course === course))
+                        );
+                        const sum = matched.reduce((s, it) => s + (Number(it.outstanding) || 0), 0);
+                        locationTotals[loc] += sum;
+                        return Math.round(sum * 100) / 100;
+                    });
+
+                    const color = colors[idx % colors.length];
+                    return {
+                        label: course,
+                        data: vals,
+                        backgroundColor: color,
+                        borderColor: '#ffffff',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        barThickness: 'flex'
+                    };
+                });
+
+                // populate summary table (location totals) + total row
+                const tbody = document.getElementById('outstandingSummaryBody');
+                tbody.innerHTML = '';
+                let grandTotal = 0;
+                Object.keys(locationTotals).forEach(loc => {
+                    const amt = locationTotals[loc];
+                    grandTotal += amt;
+                    tbody.innerHTML += `<tr>
+                                        <td class="px-6 py-4 text-sm font-medium text-gray-900">${loc}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">Rs. ${amt.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                                    </tr>`;
+                });
+
+                // Add total row
+                tbody.innerHTML += `<tr class="bg-gray-100 border-t-2 border-gray-300 font-bold">
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-900">Total</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">Rs. ${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                                </tr>`;
+
+                // Draw bar chart: x-axis = locations, datasets = courses (grouped bars)
+                const canvas = document.getElementById('outstandingTabChart');
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    if (currentCharts.outstandingTab) currentCharts.outstandingTab.destroy();
+                    currentCharts.outstandingTab = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: locations,
+                            datasets: datasets
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'top' },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            const v = context.parsed.y ?? context.parsed ?? 0;
+                                            return `${context.dataset.label}: Rs. ${Number(v).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    title: { display: true, text: 'Location' },
+                                    stacked: false
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: 'Outstanding (Rs.)' },
+                                    ticks: {
+                                        callback: function (value) {
+                                            return 'Rs. ' + Number(value).toLocaleString();
+                                        }
+                                    }
+                                }
+                            },
+                            interaction: {
+                                mode: 'nearest',
+                                intersect: false
+                            }
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error('Error loading outstanding tab data:', err);
+            }
+        }
+
         // Get filter parameters
         function getFilterParams() {
             const compareToggle = document.getElementById('compareToggle').checked;
             const rangeToggle = document.getElementById('rangeSelectorToggle').checked;
             const courseSelect = document.getElementById('courseSelect');
+            const locationSelect = document.getElementById('locationSelect');
 
             // Get selected courses
             const selectedCourses = Array.from(courseSelect.selectedOptions).map(opt => opt.value);
             const courseParam = selectedCourses.length === 0 || selectedCourses.includes('all') ? 'all' : selectedCourses.join(',');
+
+            const selectedLocations = Array.from(locationSelect.selectedOptions).map(opt => opt.value);
+            const locationParam = selectedLocations.length === 0 || selectedLocations.includes('all') ? 'all' : selectedLocations.join(',');
 
             if (rangeToggle) {
                 return {
@@ -1215,7 +1473,7 @@
                     range_end_year: document.getElementById('rangeEndYearSelect').value,
                     month: document.getElementById('studentMonthSelect').value,
                     date: document.getElementById('studentDaySelect').value,
-                    location: document.getElementById('locationSelect').value,
+                    location: locationParam,
                     course: courseParam
                 };
             } else if (compareToggle) {
@@ -1225,7 +1483,7 @@
                     to_year: document.getElementById('toYearSelect').value,
                     month: document.getElementById('studentMonthSelect').value,
                     date: document.getElementById('studentDaySelect').value,
-                    location: document.getElementById('locationSelect').value,
+                    location: locationParam,
                     course: courseParam
                 };
             } else {
@@ -1233,7 +1491,7 @@
                     year: document.getElementById('yearSelect').value,
                     month: document.getElementById('studentMonthSelect').value,
                     date: document.getElementById('studentDaySelect').value,
-                    location: document.getElementById('locationSelect').value,
+                    location: locationParam,
                     course: courseParam
                 };
             }
@@ -1243,14 +1501,18 @@
             const compareToggle = document.getElementById('revenueCompareToggle').checked;
             const rangeToggle = document.getElementById('revenueRangeSelectorToggle').checked;
             const revenueCourseSelect = document.getElementById('revenueCourseSelect');
+            const revenueLocationSelect = document.getElementById('revenueLocationSelect');
 
             // Get selected courses
             const selectedCourses = Array.from(revenueCourseSelect.selectedOptions).map(opt => opt.value);
             const courseParam = selectedCourses.length === 0 || selectedCourses.includes('all') ? 'all' : selectedCourses.join(',');
 
+            const selectedLocations = Array.from(revenueLocationSelect.selectedOptions).map(opt => opt.value);
+            const locationParam = selectedLocations.length === 0 || selectedLocations.includes('all') ? 'all' : selectedLocations.join(',');
+
             if (rangeToggle) {
                 return {
-                    location: document.getElementById('revenueLocationSelect').value,
+                    location: locationParam,
                     course: courseParam,
                     range: true,
                     range_start_year: document.getElementById('revenueRangeStartYearSelect').value,
@@ -1258,7 +1520,7 @@
                 };
             } else if (compareToggle) {
                 return {
-                    location: document.getElementById('revenueLocationSelect').value,
+                    location: locationParam,
                     course: courseParam,
                     compare: true,
                     from_year: document.getElementById('revenueFromYearSelect').value,
@@ -1269,13 +1531,29 @@
                     year: document.getElementById('revenueYearSelect').value,
                     month: document.getElementById('revenueMonthSelect').value,
                     date: document.getElementById('revenueDaySelect').value,
-                    location: document.getElementById('revenueLocationSelect').value,
+                    location: locationParam,
                     course: courseParam
                 };
             }
         }
 
 
+        function getOutstandingFilterParams() {
+            const locationSelect = document.getElementById('outstandingLocationSelect');
+            const courseSelect = document.getElementById('outstandingCourseSelect');
+
+            const selectedLocations = Array.from(locationSelect.selectedOptions).map(opt => opt.value);
+            const locationParam = selectedLocations.length === 0 || selectedLocations.includes('all') ? 'all' : selectedLocations.join(',');
+
+            const selectedCourses = Array.from(courseSelect.selectedOptions).map(opt => opt.value);
+            const courseParam = selectedCourses.length === 0 || selectedCourses.includes('all') ? 'all' : selectedCourses.join(',');
+
+            return {
+                year: new Date().getFullYear(),
+                location: locationParam,
+                course: courseParam
+            };
+        }
 
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -1473,6 +1751,10 @@
 
             enableClickMultiSelect('courseSelect');
             enableClickMultiSelect('revenueCourseSelect');
+            enableClickMultiSelect('locationSelect');
+            enableClickMultiSelect('revenueLocationSelect');
+            enableClickMultiSelect('outstandingLocationSelect');
+            enableClickMultiSelect('outstandingCourseSelect');
         });
 
         document.addEventListener('DOMContentLoaded', function () {

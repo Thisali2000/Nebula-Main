@@ -3,7 +3,7 @@
 @section('title', 'NEBULA | Course Registration')
 
 @section('content')
-<style>
+<style nonce="{{ $cspNonce }}">
     /* Existing styles */
     .terminated-disabled {
         opacity: 0.6;

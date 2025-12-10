@@ -4,7 +4,7 @@
 
 @section('content')
 
-<style>
+<style nonce="{{ $cspNonce }}">
 /* Toast Notification Styles */
 .toast-container {
     position: fixed;
@@ -1252,7 +1252,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 let paymentPlans = [];
 let paymentRecords = [];
 let paymentSummary = {};

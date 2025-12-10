@@ -3,7 +3,7 @@
 @section('title', 'NEBULA | User Profile')
 
 @section('content')
- <style>
+ <style nonce="{{ $cspNonce }}">
   .nav-tabs .nav-link.active {
     background-color: #6c8cff !important;
     color: #fff !important;
@@ -167,7 +167,7 @@
   </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 function togglePassword(fieldId) {
     const input = document.getElementById(fieldId);
     const icon = document.getElementById(fieldId + '_icon');
@@ -192,7 +192,7 @@ function togglePassword(fieldId) {
                     <!-- Toast Notifications -->
                     <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
-                    <script>
+                    <script nonce="{{ $cspNonce }}">
                     function togglePassword(fieldId) {
                         const input = document.getElementById(fieldId);
                         const icon = document.getElementById(fieldId + '_icon');
@@ -304,7 +304,7 @@ function togglePassword(fieldId) {
             </div>
 
             <!-- Tabs Activation -->
-            <script>
+            <script nonce="{{ $cspNonce }}">
             document.addEventListener('DOMContentLoaded', function() {
                 var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'));
                 triggerTabList.forEach(function(triggerEl) {

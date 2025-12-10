@@ -42,7 +42,7 @@ class ContentSecurityPolicy
             // Allow CDNs via element-specific directives.
             $csp = "default-src 'self' https:; "
                 . "script-src 'self' 'nonce-$nonce'; "
-                . "script-src-elem 'self' 'nonce-$nonce' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; "
+                . "script-src-elem 'self' 'nonce-$nonce' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn-script.com https://ajax.googleapis.com; "
                 . "style-src 'self' 'nonce-$nonce' https://fonts.googleapis.com; "
                 . "style-src-elem 'self' 'nonce-$nonce' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; "
                 . "style-src-attr 'unsafe-inline'; "
@@ -53,11 +53,13 @@ class ContentSecurityPolicy
                 . "frame-ancestors 'self';";
         } else {
             // Production: strict; allow self, trusted Google font origins, and required CDNs, rely on nonce for inline elements
+            // Note: style-src-attr 'unsafe-inline' is needed for inline style attributes used in the UI
             $csp = "default-src 'self'; "
                 . "script-src 'self' 'nonce-$nonce'; "
-                . "script-src-elem 'self' 'nonce-$nonce' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; "
+                . "script-src-elem 'self' 'nonce-$nonce' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn-script.com https://ajax.googleapis.com; "
                 . "style-src 'self' 'nonce-$nonce' https://fonts.googleapis.com; "
                 . "style-src-elem 'self' 'nonce-$nonce' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; "
+                . "style-src-attr 'unsafe-inline'; "
                 . "img-src 'self' data:; "
                 . "connect-src 'self'; "
                 . "font-src 'self' https://fonts.gstatic.com; "
