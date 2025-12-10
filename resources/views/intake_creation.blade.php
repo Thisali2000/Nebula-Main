@@ -1112,7 +1112,7 @@ window.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
-<style>
+<style nonce="{{ $cspNonce }}">
 .table th {
     font-size: 0.95rem !important;
     font-weight: 600;

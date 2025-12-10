@@ -484,7 +484,7 @@
         </div>
     </div>
 
-    <style>
+    <style nonce="{{ $cspNonce }}">
         .tab-active {
             background-color: #2563eb !important;
             color: white !important;

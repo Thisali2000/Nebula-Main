@@ -486,7 +486,7 @@
         </div>
     </div>
 
-    <style>
+    <style nonce="<?php echo e($cspNonce); ?>">
         .tab-active {
             background-color: #2563eb !important;
             color: white !important;

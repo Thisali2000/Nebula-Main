@@ -62,7 +62,12 @@ class DGMDashboardController extends Controller
             $bulkRevenueQuery->where('day', $day);
         }
 
-        $bulkRevenue = $bulkRevenueQuery->sum('revenue');
+        try {
+            $bulkRevenue = $bulkRevenueQuery->sum('revenue');
+        } catch (\Throwable $ex) {
+            Log::error('Bulk revenue query failed: ' . $ex->getMessage(), ['year' => $year, 'location' => $location, 'course' => $course]);
+            $bulkRevenue = 0;
+        }
 
         // 2. From payment_details (partial payments)
         $paymentBaseQuery = PaymentDetail::query();
@@ -103,13 +108,18 @@ class DGMDashboardController extends Controller
         $prevYear = $year - 1;
 
         // 1. Previous year bulk revenue
-        $prevBulkRevenue = DB::table('bulk_revenue_uploads')
-            ->where('year', $prevYear)
-            ->when($location !== 'all', fn($q) => $q->where('location', $location))
-            ->when($course !== 'all', fn($q) => $q->where('course', $course))
-            ->when($month, fn($q) => $q->where('month', $month))
-            ->when($day, fn($q) => $q->where('day', $day))
-            ->sum('revenue');
+        try {
+            $prevBulkRevenue = DB::table('bulk_revenue_uploads')
+                ->where('year', $prevYear)
+                ->when($location !== 'all', fn($q) => $q->where('location', $location))
+                ->when($course !== 'all', fn($q) => $q->where('course', $course))
+                ->when($month, fn($q) => $q->where('month', $month))
+                ->when($day, fn($q) => $q->where('day', $day))
+                ->sum('revenue');
+        } catch (\Throwable $ex) {
+            Log::error('Prev bulk revenue query failed: ' . $ex->getMessage(), ['prevYear' => $prevYear, 'location' => $location, 'course' => $course]);
+            $prevBulkRevenue = 0;
+        }
 
         // 2. Previous year partial payments
         $prevPartialPaymentsRevenue = 0;
@@ -170,11 +180,16 @@ class DGMDashboardController extends Controller
 
         foreach ($locations as $loc) {
             // Current year bulk revenue
-            $currBulkRev = DB::table('bulk_revenue_uploads')
-                ->where('year', $year)
-                ->where('location', $loc)
-                ->when($course !== 'all', fn($q) => $q->where('course', $course))
-                ->sum('revenue');
+            try {
+                $currBulkRev = DB::table('bulk_revenue_uploads')
+                    ->where('year', $year)
+                    ->where('location', $loc)
+                    ->when($course !== 'all', fn($q) => $q->where('course', $course))
+                    ->sum('revenue');
+            } catch (\Throwable $ex) {
+                Log::warning('Curr bulk revenue query failed for location: ' . $loc . ' - ' . $ex->getMessage());
+                $currBulkRev = 0;
+            }
 
             // Current year partial payments
             $currPartialRev = 0;
@@ -198,11 +213,16 @@ class DGMDashboardController extends Controller
             }
 
             // Previous year calculations
-            $prevBulkRev = DB::table('bulk_revenue_uploads')
-                ->where('year', $prevYear)
-                ->where('location', $loc)
-                ->when($course !== 'all', fn($q) => $q->where('course', $course))
-                ->sum('revenue');
+            try {
+                $prevBulkRev = DB::table('bulk_revenue_uploads')
+                    ->where('year', $prevYear)
+                    ->where('location', $loc)
+                    ->when($course !== 'all', fn($q) => $q->where('course', $course))
+                    ->sum('revenue');
+            } catch (\Throwable $ex) {
+                Log::warning('Prev bulk revenue query failed for location: ' . $loc . ' - ' . $ex->getMessage());
+                $prevBulkRev = 0;
+            }
 
             $prevPartialRev = 0;
             foreach ($locPayments as $p) {
