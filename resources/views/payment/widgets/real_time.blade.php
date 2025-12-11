@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 // Real-time Dashboard Update System
 let lastPaymentId = 0;
 let updateInterval;
