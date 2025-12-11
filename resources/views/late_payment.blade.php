@@ -212,7 +212,7 @@
 @endsection
 
 @section('scripts')
-<script>
+<script nonce="{{ $cspNonce }}">
 // Global variables
 let currentStudentData = null;
 let currentPaymentPlan = null;

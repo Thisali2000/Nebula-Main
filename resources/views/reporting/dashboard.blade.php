@@ -122,7 +122,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 $(document).ready(function() {
     // Load courses for filter
     loadCourses();

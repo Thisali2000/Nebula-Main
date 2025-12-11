@@ -218,7 +218,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 document.addEventListener("DOMContentLoaded", function () {
     const studentNicInput = document.getElementById("student-nic");
     const courseSelect = document.getElementById("course_id");
