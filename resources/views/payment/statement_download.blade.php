@@ -45,7 +45,7 @@
 @endsection
 
 @section('scripts')
-<script>
+<script nonce="{{ $cspNonce }}">
     // Load courses when NIC is entered
     document.getElementById('statement-nic').addEventListener('change', function() {
         const studentNic = this.value;

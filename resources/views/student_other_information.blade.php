@@ -211,7 +211,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
     // Toggle Higher Studies
     const continueYes = document.getElementById('continueYes');
     const continueNo = document.getElementById('continueNo');

@@ -566,7 +566,7 @@
 @endsection
 
 @push('scripts')
-<script>
+<script nonce="{{ $cspNonce }}">
 
 
 function showToast(message, type) {
