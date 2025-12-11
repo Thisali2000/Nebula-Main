@@ -204,7 +204,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $cspNonce }}">
 $(document).ready(function() {
     // Load storage statistics
     loadStorageStats();
