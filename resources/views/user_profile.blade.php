@@ -138,7 +138,7 @@
   </label>
   <div class="input-group">
     <input type="password" class="form-control" id="current_password" name="current_password" required>
-    <span class="input-group-text cursor-pointer" onclick="togglePassword('current_password')">
+    <span class="input-group-text cursor-pointer password-toggle" data-field="current_password">
       <i class="bi bi-eye" id="current_password_icon"></i>
     </span>
   </div>
@@ -150,7 +150,7 @@
   <label for="new_password" class="form-label">New Password</label>
   <div class="input-group">
     <input type="password" class="form-control" id="new_password" name="new_password" required minlength="6">
-    <span class="input-group-text cursor-pointer" onclick="togglePassword('new_password')">
+    <span class="input-group-text cursor-pointer password-toggle" data-field="new_password">
       <i class="bi bi-eye" id="new_password_icon"></i>
     </span>
   </div>
@@ -161,7 +161,7 @@
   <label for="new_password_confirmation" class="form-label">Confirm New Password</label>
   <div class="input-group">
     <input type="password" class="form-control" id="new_password_confirmation" name="new_password_confirmation" required minlength="6">
-    <span class="input-group-text cursor-pointer" onclick="togglePassword('new_password_confirmation')">
+    <span class="input-group-text cursor-pointer password-toggle" data-field="new_password_confirmation">
       <i class="bi bi-eye" id="new_password_confirmation_icon"></i>
     </span>
   </div>
@@ -208,6 +208,15 @@ function togglePassword(fieldId) {
                     }
 
                     document.addEventListener('DOMContentLoaded', function() {
+                        // Attach password toggle handlers
+                        const toggles = document.querySelectorAll('.password-toggle');
+                        toggles.forEach(toggle => {
+                            toggle.addEventListener('click', function() {
+                                const fieldId = this.getAttribute('data-field');
+                                togglePassword(fieldId);
+                            });
+                        });
+
                         const pwdForm = document.getElementById('changePasswordForm');
                         const pictureForm = document.getElementById('profilePictureForm');
                         const profileImg = document.getElementById('profilePictureImg');

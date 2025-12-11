@@ -527,12 +527,20 @@ function showToast(title, message, type = 'info') {
             <div class="toast-title">${title}</div>
             <div class="toast-message">${message}</div>
         </div>
-        <button class="toast-close" onclick="this.parentElement.remove()">
+        <button class="toast-close" data-action="remove-toast">
             <i class="ti ti-x"></i>
         </button>
     `;
     
     toastContainer.appendChild(toast);
+    
+    // Attach event listener to new toast close button
+    const closeBtn = toast.querySelector('[data-action="remove-toast"]');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            this.parentElement.remove();
+        });
+    }
     
     // Auto remove after 5 seconds
     setTimeout(() => {

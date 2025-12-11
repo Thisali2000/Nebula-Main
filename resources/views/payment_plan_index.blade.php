@@ -22,10 +22,10 @@
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                 <h2 class="mb-0 fs-4 fs-md-3">Payment Plans</h2>
                 <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-success btn-sm" onclick="exportData('csv')">
+                    <button type="button" class="btn btn-success btn-sm" id="exportCsvBtn">
                         <i class="bi bi-file-earmark-spreadsheet"></i> CSV
                     </button>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="exportData('pdf')">
+                    <button type="button" class="btn btn-danger btn-sm" id="exportPdfBtn">
                         <i class="bi bi-file-earmark-pdf"></i> PDF
                     </button>
                 </div>
@@ -428,6 +428,19 @@ function exportData(format) {
     }
 }
 
+// Attach event listeners for export buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+    if (exportCsvBtn) {
+        exportCsvBtn.addEventListener('click', () => exportData('csv'));
+    }
+
+    const exportPdfBtn = document.getElementById('exportPdfBtn');
+    if (exportPdfBtn) {
+        exportPdfBtn.addEventListener('click', () => exportData('pdf'));
+    }
+});
+
 function exportToCSV(plans) {
     // CSV Headers
     const headers = ['ID', 'Location', 'Course', 'Intake', 'Reg. Fee (LKR)', 'Local Fee (LKR)', 
@@ -472,7 +485,7 @@ function exportToPDF(plans) {
         <html>
         <head>
             <title>Payment Plans Report</title>
-            <style>
+            <style nonce="{{ $cspNonce }}">
                 body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; }
                 h1 { text-align: center; color: #333; margin-bottom: 10px; }
                 .info { text-align: center; margin-bottom: 20px; color: #666; }

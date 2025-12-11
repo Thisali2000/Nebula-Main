@@ -115,7 +115,7 @@
     </div>
   </div>
 </div>
-<style>
+<style nonce="{{ $cspNonce }}">
   .error-message {
     position: fixed;
     top: 20px;

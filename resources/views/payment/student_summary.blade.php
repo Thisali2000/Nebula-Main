@@ -654,7 +654,7 @@ function exportStudentData() {
 }
 </script>
 
-<style>
+<style nonce="{{ $cspNonce }}">
 @media print {
     .btn, .card-header, .filter-section {
         display: none !important;

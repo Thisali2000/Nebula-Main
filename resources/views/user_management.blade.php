@@ -3,7 +3,7 @@
 @section('title', 'NEBULA | User Management')
 
 @section('content')
-<style>
+<style nonce="{{ $cspNonce }}">
     .user-mgmt-card {
         max-width: 1100px;
         margin: 40px auto 0 auto;
@@ -86,9 +86,9 @@
                         <td>{{ $user['user_location'] }}</td>
                         <td>{{ $user['created_at'] }}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" onclick="editUser({{ $user['user_id'] }})">Edit</button>
-                            <button class="btn btn-sm btn-danger" style="margin-left:4px;" onclick="deleteUser({{ $user['user_id'] }}, '{{ $user['user_name'] }}')">Delete</button>
-                            <button class="btn btn-sm btn-warning" style="margin-left:4px;" onclick="showResetPasswordModal({{ $user['user_id'] }}, '{{ $user['user_name'] }}')">Reset Password</button>
+                            <button class="btn btn-sm btn-primary" data-user-id="{{ $user['user_id'] }}" data-action="edit">Edit</button>
+                            <button class="btn btn-sm btn-danger" style="margin-left:4px;" data-user-id="{{ $user['user_id'] }}" data-user-name="{{ $user['user_name'] }}" data-action="delete">Delete</button>
+                            <button class="btn btn-sm btn-warning" style="margin-left:4px;" data-user-id="{{ $user['user_id'] }}" data-user-name="{{ $user['user_name'] }}" data-action="reset-password">Reset Password</button>
                         </td>
                     </tr>
                     @endforeach
@@ -362,6 +362,25 @@ function showToast(message, type) {
     toast.show();
     return toast;
 }
+
+// Attach event listeners to action buttons
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('button[data-action]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const action = this.getAttribute('data-action');
+            const userId = this.getAttribute('data-user-id');
+            const userName = this.getAttribute('data-user-name');
+
+            if (action === 'edit') {
+                editUser(userId);
+            } else if (action === 'delete') {
+                deleteUser(userId, userName);
+            } else if (action === 'reset-password') {
+                showResetPasswordModal(userId, userName);
+            }
+        });
+    });
+});
 </script>
 
 <!-- Include DataTables CSS and JS -->

@@ -173,7 +173,7 @@ document.addEventListener('visibilitychange', function() {
 });
 </script>
 
-<style>
+<style nonce="{{ $cspNonce }}">
 .blink {
     animation: blink 2s infinite;
 }

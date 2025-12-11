@@ -406,7 +406,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<style>
+<style nonce="{{ $cspNonce }}">
 .card {
     transition: all 0.3s ease;
 }

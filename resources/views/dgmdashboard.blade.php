@@ -42,23 +42,23 @@
         <nav class="bg-white shadow-sm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex space-x-1 py-3">
-                    <button onclick="showTab('overview')" id="tab-overview"
+                    <button data-tab="overview" id="tab-overview"
                         class="px-4 py-2 rounded-lg text-sm font-medium tab-active">
                         <i class="fas fa-chart-line mr-2"></i>Overview
                     </button>
-                    <button onclick="showTab('students')" id="tab-students"
+                    <button data-tab="students" id="tab-students"
                         class="px-4 py-2 rounded-lg text-sm font-medium tab-inactive">
                         <i class="fas fa-users mr-2"></i>Students
                     </button>
-                    <button onclick="showTab('revenues')" id="tab-revenues"
+                    <button data-tab="revenues" id="tab-revenues"
                         class="px-4 py-2 rounded-lg text-sm font-medium tab-inactive">
                         <i class="fas fa-dollar-sign mr-2"></i>Revenues
                     </button>
-                    <button onclick="showTab('outstanding')" id="tab-outstanding"
+                    <button data-tab="outstanding" id="tab-outstanding"
                         class="px-4 py-2 rounded-lg text-sm font-medium tab-inactive">
                         <i class="fas fa-exclamation-circle mr-2"></i>Outstanding
                     </button>
-                    <button onclick="showTab('marketing')" id="tab-marketing"
+                    <button data-tab="marketing" id="tab-marketing"
                         class="px-4 py-2 rounded-lg text-sm font-medium tab-inactive">
                         <i class="fas fa-share-alt mr-2"></i>Marketing
                     </button>
@@ -1555,6 +1555,14 @@
 
 
         document.addEventListener('DOMContentLoaded', function () {
+            // Attach event listeners to tab buttons
+            document.querySelectorAll('[data-tab]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    showTab(tabName);
+                });
+            });
+
             const compareToggle = document.getElementById('compareToggle');
             const rangeToggle = document.getElementById('rangeSelectorToggle');
             const yearSelect = document.getElementById('yearSelect');

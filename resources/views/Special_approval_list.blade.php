@@ -2,7 +2,7 @@
 @section('title', 'NEBULA | Special Approval List')
 
 @section('content')
-<style>
+<style nonce="{{ $cspNonce }}">
 /* Toast-like messages */
 .success-message,.error-message{
   position:fixed;top:20px;right:20px;z-index:9999;color:#fff;padding:15px 20px;border-radius:10px;

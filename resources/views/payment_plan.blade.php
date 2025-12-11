@@ -163,11 +163,11 @@
                             <label class="col-sm-3 col-form-label">Apply Full Payment Discount<span class="text-danger">*</span></label>
                             <div class="col-sm-3 d-flex justify-content-between">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="applyDiscountYes" name="applyDiscount" value="yes" onclick="toggleDiscountField()">
+                                    <input class="form-check-input" type="radio" id="applyDiscountYes" name="applyDiscount" value="yes" data-action="toggleDiscountField">
                                     <label class="form-check-label cursor-pointer bg-white p-1 rounded" for="applyDiscountYes">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="applyDiscountNo" name="applyDiscount" value="no" onclick="toggleDiscountField()" checked>
+                                    <input class="form-check-input" type="radio" id="applyDiscountNo" name="applyDiscount" value="no" data-action="toggleDiscountField" checked>
                                     <label class="form-check-label cursor-pointer bg-white p-1 rounded" for="applyDiscountNo">No</label>
                                 </div>
                             </div>
@@ -187,11 +187,11 @@
                             <label class="col-sm-3 col-form-label">Installment Plan<span class="text-danger"></span></label>
                             <div class="col-sm-3 d-flex justify-content-between">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="franchisePaymentYes" name="franchisePayment" value="yes" onclick="toggleAmountField()">
+                                    <input class="form-check-input" type="radio" id="franchisePaymentYes" name="franchisePayment" value="yes" data-action="toggleAmountField">
                                     <label class="form-check-label cursor-pointer bg-white p-1 rounded" for="franchisePaymentYes">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="franchisePaymentNo" name="franchisePayment" value="no" onclick="toggleAmountField()" checked>
+                                    <input class="form-check-input" type="radio" id="franchisePaymentNo" name="franchisePayment" value="no" data-action="toggleAmountField" checked>
                                     <label class="form-check-label cursor-pointer bg-white p-1 rounded" for="franchisePaymentNo">No</label>
                                 </div>
                             </div>
@@ -202,7 +202,7 @@
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <input type="number" class="form-control bg-white" id="installments" name="installments" placeholder="Enter number of installments">
-                                        <button type="button" class="btn btn-primary" onclick="addRows()">Add</button>
+                                        <button type="button" class="btn btn-primary" id="addRowsBtn">Add</button>
                                     </div>
                                 </div>
                             </div>
@@ -240,7 +240,7 @@
                                          </tr>
                                          <tr id="autoCompleteRow" style="display: none;">
                                              <td colspan="5" class="text-center">
-                                                 <button type="button" class="btn btn-sm btn-outline-primary" onclick="autoCompleteRemaining()">
+                                                 <button type="button" class="btn btn-sm btn-outline-primary" id="autoCompleteBtn">
                                                      <i class="fas fa-magic"></i> Auto-complete remaining amounts
                                                  </button>
                                              </td>
@@ -304,12 +304,22 @@ function addRows() {
     row.innerHTML = `
               <td>${i}</td>
               <td><input type="date" class="form-control" id="dueDate${i}" name="dueDate${i}"></td>
-              <td><input type="number" class="form-control" id="localAmount${i}" name="localAmount${i}" placeholder="0" oninput="validateInput(this); calculateTotals();"></td>
-              <td><input type="number" class="form-control" id="internationalAmount${i}" name="internationalAmount${i}" placeholder="0" oninput="validateInput(this); calculateTotals();"></td>
+              <td><input type="number" class="form-control installment-amount" data-type="local" id="localAmount${i}" name="localAmount${i}" placeholder="0"></td>
+              <td><input type="number" class="form-control installment-amount" data-type="international" id="internationalAmount${i}" name="internationalAmount${i}" placeholder="0"></td>
               <td><input type="checkbox" id="applyTax${i}" name="applyTax${i}"></td>
           `;
     tableBody.appendChild(row);
   }
+  
+  // Attach event listeners to newly created inputs
+  const amountInputs = tableBody.querySelectorAll('.installment-amount');
+  amountInputs.forEach(input => {
+    input.addEventListener('input', function() {
+      validateInput(this);
+      calculateTotals();
+    });
+  });
+  
   calculateTotals();
 }
 
@@ -694,6 +704,30 @@ window.addEventListener('DOMContentLoaded', function () {
     // Run on load + when location changes
     toggleFormFields();
     $location.on('change', toggleFormFields);
+
+    // Attach event listeners for radio button data-action attributes
+    const actionRadios = document.querySelectorAll('[data-action]');
+    actionRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const action = this.getAttribute('data-action');
+            if (action === 'toggleDiscountField') {
+                toggleDiscountField();
+            } else if (action === 'toggleAmountField') {
+                toggleAmountField();
+            }
+        });
+    });
+
+    // Attach event listeners for buttons
+    const addRowsBtn = document.getElementById('addRowsBtn');
+    if (addRowsBtn) {
+        addRowsBtn.addEventListener('click', addRows);
+    }
+
+    const autoCompleteBtn = document.getElementById('autoCompleteBtn');
+    if (autoCompleteBtn) {
+        autoCompleteBtn.addEventListener('click', autoCompleteRemaining);
+    }
 });
 
 

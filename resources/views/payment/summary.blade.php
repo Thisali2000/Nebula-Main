@@ -672,7 +672,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<style>
+<style nonce="{{ $cspNonce }}">
 .payment-summary-reset{} /* anchor for quick search */
 /* ---- Page background: force clean white and remove any image for this page only ---- */
 /* body, .app-content, .content, .content-wrapper, main, #payment-summary {
